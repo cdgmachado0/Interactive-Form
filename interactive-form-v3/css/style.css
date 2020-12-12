@@ -633,3 +633,7 @@ button:hover {
     width: 160px;
   }
 }
+
+.error-label {
+  color: red;
+}
