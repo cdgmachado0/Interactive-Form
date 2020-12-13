@@ -216,29 +216,29 @@ for (let i = 0; i < inputListArr.length; i++) {
             {zip: zipRegex.test(zipInput.value)},
             {cvv: cvvRegex.test(cvvInput.value)}
         ];
-        if (valid[i]['name']) {
+        if (valid[i]['name'] && e.target.name === 'user-name') {
             toggleError(name, nameLabel, '', 'Name: ');    
-        } else {
+        } else if (valid[i]['name'] === '') {
             toggleError(name, nameLabel, 'error', 'Name: Can\'t be empty', e);
         }
-        if (valid[i]['email']) {
+        if (valid[i]['email'] && e.target.name === 'user-email') {
             toggleError(email, emailLabel, '', 'Email Address: ');
-        } else {
+        } else if (!valid[i]['email'] && e.target.name === 'user-email') {
             toggleError(email, emailLabel, 'error', 'Email Address: Insert a valid email', e);
         }
-        if (valid[i]['cc']) {
+        if (valid[i]['cc'] && e.target.name === 'user-cc-num') {
             toggleError(ccNum, ccLabel, '', 'Card Number: ');
-        } else {
+        } else if (!valid[i]['cc'] && e.target.name === 'user-cc-num') {
             toggleError(ccNum, ccLabel, 'error', 'Card Number: Enter a valid card number', e);
         }
-        if (valid[i]['zip']) {
+        if (valid[i]['zip'] && e.target.name === 'user-zip') {
             toggleError(zipInput, zipLabel, '', 'Zip Code: ');
-        } else {
+        } else if (!valid[i]['zip'] && e.target.name === 'user-zip') {
             toggleError(zipInput, zipLabel, 'error', 'Zip Code: Wrong value', e);
         }
-        if (valid[i]['cvv']) {
+        if (valid[i]['cvv'] && e.target.name === 'user-cvv') {
             toggleError(cvvInput, cvvLabel, '', 'CVV: ');
-        } else {
+        } else if (!valid[i]['cvv'] && e.target.name === 'user-cvv') {
             toggleError(cvvInput, cvvLabel, 'error', 'CVV: Wrong value', e);
         }
     });
