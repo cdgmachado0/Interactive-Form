@@ -70,20 +70,60 @@ themeSelect.addEventListener('change', e => {
 let total = 0;
 listActivities.addEventListener('change', e => {
     let checkbox = e.target;
-
     if (checkbox.tagName === 'INPUT') {
-        if (checkbox.checked) {
-            if (checkbox.dataset.dayAndTime === 'Tuesday 9am-12pm' && checkbox.name === 'js-libs') {
-                const jsFrameworks = document.querySelector('[name="js-frameworks"]');
-                jsFrameworks.disabled = true;
+        function toggleDisable(_element, _bool) {
+            if (_element) {
+            _element.disabled = _bool;
             }
-            total += +checkbox.dataset.cost;
-            
-//doing the checbox things. already got one disabled when the other
-//similar gets checked
-
+            _bool ? total += +checkbox.dataset.cost : total -= +checkbox.dataset.cost;
+        }
+        const compareActivities = (_date, _name) => {
+            if (_date) {
+                 return checkbox.dataset.dayAndTime === _date && checkbox.name === _name;
+            } else {
+                return checkbox.name === _name;
+            }
+        }
+        if (checkbox.checked) {
+            if (compareActivities('Tuesday 9am-12pm', 'js-libs')) {
+                const jsFrameworks = document.querySelector('[name="js-frameworks"]');
+                toggleDisable(jsFrameworks, true);
+            } else if (compareActivities('Tuesday 9am-12pm', 'js-frameworks')) {
+                const jsLibs = document.querySelector('[name="js-libs"]');
+                toggleDisable(jsLibs, true);
+            } else if (compareActivities('Tuesday 1pm-4pm', 'node')) {
+                const buildTools = document.querySelector('[name="build-tools"]'); 
+                toggleDisable(buildTools, true);
+            } else if (compareActivities('Tuesday 1pm-4pm', 'build-tools')) {
+                const node = document.querySelector('[name="node"]'); 
+                toggleDisable(node, true);
+            } else if (compareActivities('', 'all')) {
+                toggleDisable('', true);
+            } else if (compareActivities('', 'npm')) {
+                toggleDisable('', true);
+            } else if (compareActivities('', 'express')) {
+                toggleDisable('', true);
+            }
         } else {
-            total -= +checkbox.dataset.cost;
+            if (compareActivities('Tuesday 9am-12pm', 'js-libs')) {
+                const jsFrameworks = document.querySelector('[name="js-frameworks"]');
+                toggleDisable(jsFrameworks, false);
+            } else if (compareActivities('Tuesday 9am-12pm', 'js-frameworks')) {
+                const jsLibs = document.querySelector('[name="js-libs"]');
+                toggleDisable(jsLibs, false);
+            } else if (compareActivities('Tuesday 1pm-4pm', 'node')) {
+                const buildTools = document.querySelector('[name="build-tools"]'); 
+                toggleDisable(buildTools, false);
+            } else if (compareActivities('Tuesday 1pm-4pm', 'build-tools')) {
+                const node = document.querySelector('[name="node"]'); 
+                toggleDisable(node, false);
+            }else if (compareActivities('', 'all')) {
+                toggleDisable('', false);
+            } else if (compareActivities('', 'npm')) {
+                toggleDisable('', false);
+            } else if (compareActivities('', 'express')) {
+                toggleDisable('', false);
+            }
         }
     }
     totalHTML.textContent = `Total: $${total}`;
