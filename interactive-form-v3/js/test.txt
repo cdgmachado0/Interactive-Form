@@ -73,15 +73,7 @@ listActivities.addEventListener('change', e => {
 
     if (checkbox.tagName === 'INPUT') {
         if (checkbox.checked) {
-            if (checkbox.dataset.dayAndTime === 'Tuesday 9am-12pm' && checkbox.name === 'js-libs') {
-                const jsFrameworks = document.querySelector('[name="js-frameworks"]');
-                jsFrameworks.disabled = true;
-            }
             total += +checkbox.dataset.cost;
-            
-//doing the checbox things. already got one disabled when the other
-//similar gets checked
-
         } else {
             total -= +checkbox.dataset.cost;
         }
@@ -131,13 +123,13 @@ function toggleError(_element, _element2, _class, _text, e) {
             _element2.className = '';
         }
         _element2.firstChild.textContent = _text;
+        e.preventDefault();
     }
-    if (e) {e.preventDefault();}
 }
-
 
 form.addEventListener('submit', e => {
     listActivities = document.querySelector('#activities-box');
+
     if (name.value === '') {
         toggleError(name, nameLabel, 'error', 'Name: Can\'t be empty', e);
     }
@@ -150,56 +142,65 @@ form.addEventListener('submit', e => {
             break;
         }
     }
+
+
+
+    
+
+//cuando todo este bien no puede dar e.prevent
+
+
+    
     if (!ccRegex.test(ccNum.value)) {
+        
         toggleError(ccNum, ccLabel, 'error', 'Card Number: Enter a valid card number', e);
-    } 
+    } else {
+        toggleError(ccNum, ccLabel, 'Card Number:', e);
+    }
+    
     if (!zipRegex.test(zipInput.value)) {
         toggleError(zipInput, zipLabel, 'error', 'Zip Code: Wrong value', e);
-    } 
+    } else {
+        toggleError(zipInput, zipLabel, 'Zip Code:', e);
+    }
+
     if (!cvvRegex.test(cvvInput.value)) {
         toggleError(cvvInput, cvvLabel, 'error', 'CVV: Wrong value', e);
-    } 
+    } else {
+        toggleError(cvvInput, cvvLabel, 'CVV:', e);
+    }
+
 });
 
 
 
+name.addEventListener('input', e => {
+    if (e.target.value) {
+        toggleError(name, nameLabel, '', 'Name: ');
+    } else {
+        toggleError(name, nameLabel, 'error', 'Name: Can\'t be empty', e);
+    }
+});
 
-const inputList = document.querySelectorAll('input[type="text"]');
-const inputListArr = Array.from(inputList);
-inputListArr[1] = email;
-for (let i = 0; i < inputListArr.length; i++) {
-    inputListArr[i].addEventListener('input', e => {
+const inputTextList = document.querySelector('input[type="text"]');
+for (let i = 0; i < inputTextList.length; i++) {
+    inputTextList[i].addEventListener('input', e => {
         let valid = [
             {name: e.target.value},
-            {email: emailRegex.test(email.value)},
-            {cc: ccRegex.test(ccNum.value)},
-            {zip: zipRegex.test(zipInput.value)},
-            {cvv: cvvRegex.test(cvvInput.value)}
+            {cc: ccRegex.test(ccNum)},
+            {zip: zipRegex.test(zipInput)},
+            {cvv: cvvRegex.test(cvvInput)}
         ];
         if (valid[i]['name']) {
             toggleError(name, nameLabel, '', 'Name: ');    
         } else {
             toggleError(name, nameLabel, 'error', 'Name: Can\'t be empty', e);
         }
-        if (valid[i]['email']) {
-            toggleError(email, emailLabel, '', 'Email Address: ');
-        } else {
-            toggleError(email, emailLabel, 'error', 'Email Address: Insert a valid email', e);
-        }
+
         if (valid[i]['cc']) {
-            toggleError(ccNum, ccLabel, '', 'Card Number: ');
+
         } else {
-            toggleError(ccNum, ccLabel, 'error', 'Card Number: Enter a valid card number', e);
-        }
-        if (valid[i]['zip']) {
-            toggleError(zipInput, zipLabel, '', 'Zip Code: ');
-        } else {
-            toggleError(zipInput, zipLabel, 'error', 'Zip Code: Wrong value', e);
-        }
-        if (valid[i]['cvv']) {
-            toggleError(cvvInput, cvvLabel, '', 'CVV: ');
-        } else {
-            toggleError(cvvInput, cvvLabel, 'error', 'CVV: Wrong value', e);
+
         }
     });
 }
