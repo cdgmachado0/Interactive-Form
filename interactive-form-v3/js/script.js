@@ -194,8 +194,10 @@ form.addEventListener('submit', e => {
     if (nameInput.value === '') {
         toggleError(nameInput, nameLabel, 'error', 'Name: Can\'t be empty', e);
     }
-    if (!emailRegex.test(emailInput.value)) {
+    if (!emailRegex.test(emailInput.value) && emailInput.value !== '') {
         toggleError(emailInput, emailLabel, 'error', 'Email Address: Insert a valid email', e);
+    } else {
+        toggleError(emailInput, emailLabel, 'error', 'Email Address: Can\'t be empty', e);
     }
     for (let i = 0; i < actCheckboxes.length; i++) {
         if (!actCheckboxes[i].checked) {
@@ -239,8 +241,10 @@ for (let i = 0; i < inputListArr.length; i++) {
         }
         if (isValid[i]['email'] && targetName === 'user-email') {
             toggleError(emailInput, emailLabel, '', 'Email Address: ');
-        } else if (!isValid[i]['email'] && targetName === 'user-email') {
+        } else if (!isValid[i]['email'] && targetName === 'user-email' && emailInput.value !== '') {
             toggleError(emailInput, emailLabel, 'error', 'Email Address: Insert a valid email', e);
+        } else if (!isValid[i]['email'] && targetName === 'user-email' && emailInput.value === '') {
+            toggleError(emailInput, emailLabel, 'error', 'Email Address: Can\'t be empty', e);
         }
         if (isValid[i]['cc'] && targetName === 'user-cc-num') {
             toggleError(ccNum, ccLabel, '', 'Card Number: ');

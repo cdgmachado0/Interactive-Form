@@ -21,4 +21,5 @@
     inputs and labels where the function is called, depending on the result of the validation condition and its
     target element.
 
-
+5. The "toggleError" function also displays the proper error message depending on the reason why the mandatory
+    input couldn't be validated. 
