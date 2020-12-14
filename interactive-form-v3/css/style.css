@@ -637,3 +637,7 @@ button:hover {
 .error-label {
   color: red;
 }
+
+:focus-visible  {
+  outline: 3px solid black;
+}

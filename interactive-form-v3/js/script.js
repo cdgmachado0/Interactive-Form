@@ -51,8 +51,6 @@ themeSelect.addEventListener('change', e => {
     if (selection) {
         colorSelect.disabled = '';
     }
-
-    
     if (selection === 'js puns') {
         for (let i = 0; i < heartJs.length; i++) {
             heartJs[i].style.display = 'none';
@@ -125,8 +123,30 @@ listActivities.addEventListener('change', e => {
                 toggleDisable('', false);
             }
         }
+        let flag = false;
+        for (let i = 0; i < actCheckboxes.length; i++) {
+            if (actCheckboxes[i].checked) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            toggleError(activitiesLegend, null, 'error-label', 'Register for Activities: Select at least one activity', e);
+        } else {
+            toggleError(activitiesLegend, null, '', 'Register for Activities <span class="asterisk">*</span>');
+        }
     }
     totalHTML.textContent = `Total: $${total}`;
+});
+
+listActivities.addEventListener('keydown', e => {
+    // labelList = listActivities.children;
+    // for (let i = 0; i < labelList.length; i++) {
+    //     labelList[i].style.background = 'red';
+    // }
+    if (e.target.tagName === 'INPUT') {
+        // e.target.parentNode.className = 'selected';
+    }
 });
 
 
@@ -161,7 +181,7 @@ const cvvRegex = /^\d{3}$/;
 function toggleError(_element, _element2, _class, _text, e) {
     if (!_element2) {
         _element.className = _class;
-        _element.textContent = _text;
+        _element.innerHTML = _text;
     } else {
         if (_class === 'error') {
             _element.className = 'error'
@@ -175,6 +195,16 @@ function toggleError(_element, _element2, _class, _text, e) {
     if (e) {e.preventDefault();}
 }
 
+// function checkValidCheckboxes() {
+//     for (let i = 0; i < actCheckboxes.length; i++) {
+//         if (!actCheckboxes[i].checked) {
+//             toggleError(activitiesLegend, null, 'error-label', 'Register for Activities: Select at least one activity', e);
+//             break;
+//         } else {
+//             break;
+//         }
+//     }
+// }
 
 form.addEventListener('submit', e => {
     listActivities = document.querySelector('#activities-box');
@@ -188,17 +218,21 @@ form.addEventListener('submit', e => {
         if (!actCheckboxes[i].checked) {
             toggleError(activitiesLegend, null, 'error-label', 'Register for Activities: Select at least one activity', e);
             break;
+        } else {
+            break;
         }
     }
-    if (!ccRegex.test(ccNum.value)) {
-        toggleError(ccNum, ccLabel, 'error', 'Card Number: Enter a valid card number', e);
-    } 
-    if (!zipRegex.test(zipInput.value)) {
-        toggleError(zipInput, zipLabel, 'error', 'Zip Code: Wrong value', e);
-    } 
-    if (!cvvRegex.test(cvvInput.value)) {
-        toggleError(cvvInput, cvvLabel, 'error', 'CVV: Wrong value', e);
-    } 
+    if (selectPayment.value === 'credit-card') {
+        if (!ccRegex.test(ccNum.value)) {
+            toggleError(ccNum, ccLabel, 'error', 'Card Number: Enter a valid card number', e);
+        } 
+        if (!zipRegex.test(zipInput.value)) {
+            toggleError(zipInput, zipLabel, 'error', 'Zip Code: Wrong value', e);
+        } 
+        if (!cvvRegex.test(cvvInput.value)) {
+            toggleError(cvvInput, cvvLabel, 'error', 'CVV: Wrong value', e);
+        } 
+    }
 });
 
 
@@ -243,6 +277,8 @@ for (let i = 0; i < inputListArr.length; i++) {
         }
     });
 }
+
+
 
 
 
