@@ -54,7 +54,7 @@ toggleDisplay(bitcoin, 'none');
 ccOption.selected = true;
 
 /**
- * Switches the error class back and forward, and updates error message accordingly
+ * Switches the error class back and forward, updates error message accordingly, and adds the error icon
  * @param {HTML Element} _element main element where the error class will be enabled/disabled
  * @param {HTML Element} _element2 secondary element with a secondary procedure for the error class
  * @param {string} _class name of the error class
@@ -62,6 +62,12 @@ ccOption.selected = true;
  * @param {event} e event object
  */
 function toggleError(_element, _element2, _class, _text, e) {
+    function createExclamationTriangle() {
+        const span = _element2.firstElementChild;
+        const i = document.createElement('i');
+        i.className = 'fas fa-exclamation-triangle';
+        _element2.insertBefore(i, span);   
+    }
     if (!_element2) {
         _element.className = _class;
         _element.innerHTML = _text;
@@ -69,9 +75,12 @@ function toggleError(_element, _element2, _class, _text, e) {
         if (_class === 'error') {
             _element.className = 'error'
             _element2.className = 'error-label';
+            if (!_element2.querySelector('i')) {createExclamationTriangle();}
         } else {
+            const i = _element2.querySelector('i');
             _element.className = ''
             _element2.className = '';
+            _element2.removeChild(i);
         }
         _element2.firstChild.textContent = _text;
     }
@@ -160,7 +169,7 @@ listActivities.addEventListener('change', e => {
             }
         }
         if (!flag) {
-            toggleError(activitiesLegend, null, 'error-label', 'Register for Activities: Select at least one activity', e);
+            toggleError(activitiesLegend, null, 'error-label', 'Register for Activities: Select at least one activity <i class="fas fa-exclamation-triangle"></i>', e);
         } else {
             toggleError(activitiesLegend, null, '', 'Register for Activities <span class="asterisk">*</span>');
         }
@@ -191,21 +200,24 @@ selectPayment.addEventListener('change', e => {
 //Handles the validation of each mandatory input once the form is submitted
 form.addEventListener('submit', e => {
     listActivities = document.querySelector('#activities-box');
+    let checkboxes = actCheckboxes.length;
+    let flag = 0;
     if (nameInput.value === '') {
         toggleError(nameInput, nameLabel, 'error', 'Name: Can\'t be empty', e);
     }
     if (!emailRegex.test(emailInput.value) && emailInput.value !== '') {
         toggleError(emailInput, emailLabel, 'error', 'Email Address: Insert a valid email', e);
-    } else {
+    } else if (emailInput.value === '') {
         toggleError(emailInput, emailLabel, 'error', 'Email Address: Can\'t be empty', e);
     }
     for (let i = 0; i < actCheckboxes.length; i++) {
-        if (!actCheckboxes[i].checked) {
-            toggleError(activitiesLegend, null, 'error-label', 'Register for Activities: Select at least one activity', e);
+        if (actCheckboxes[i].checked) {
+            toggleError(activitiesLegend, null, '', 'Register for Activities');
             break;
         } else {
-            break;
+            flag++;
         }
+        if (flag === checkboxes) {toggleError(activitiesLegend, null, 'error-label', 'Register for Activities: Select at least one activity <i class="fas fa-exclamation-triangle"></i>', e);}
     }
     if (selectPayment.value === 'credit-card') {
         if (!ccRegex.test(ccNum.value)) {toggleError(ccNum, ccLabel, 'error', 'Card Number: Enter a valid card number', e);} 
